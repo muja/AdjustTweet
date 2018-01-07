@@ -1,0 +1,11 @@
+.field_group * {
+  display: inline;
+}
+
+#error_explanation {
+
+}
+
+.field_with_errors input {
+  border-color: red;
+}

@@ -1,21 +1,28 @@
-%h1 Listing tweets
+%h1 Search for tweets
 
-%table
-  %thead
-    %tr
-      %th Query
-      %th
-      %th
-      %th
+= form_for @search, url: search_tweets_path, method: :post do |f|
+  #error_explanation
+    - if @search.errors.one?
+      %b Error:
+      = @search.errors.full_messages[0]
+    - elsif @search.errors.any? # >= 2 errors
+      %b Error:
+      %ul
+        - @search.errors.full_messages.each do |msg|
+          %li= msg
 
-  %tbody
-    - @tweets.each do |tweet|
-      %tr
-        %td= tweet.query
-        %td= link_to 'Show', tweet
-        %td= link_to 'Edit', edit_tweet_path(tweet)
-        %td= link_to 'Destroy', tweet, :method => :delete, :data => { :confirm => 'Are you sure?' }
+  .field_group
+    .field
+      = f.text_field :query
+    .actions
+      = f.submit "Search for tweets!"
 
-%br
+#result
+  - if @tweets.any?
+    %ul
+      - @tweets.each do |tweet|
+        %li
+          %b=tweet.user.name
+          (@#{tweet.user.screen_name}) tweeted on #{tweet.created_at}:
+          %p=tweet.full_text
 
-= link_to 'New Tweet', new_tweet_path
